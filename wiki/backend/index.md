@@ -2,8 +2,11 @@
 
 Route here for: server-side application code — API contracts (status codes,
 error bodies, retries, pagination), outbound service calls, caching, background
-jobs/queue consumers, and exception-handling structure. SQL, index, and
-transaction mechanics stay in the databases domain (pages link there).
+jobs/queue consumers, exception-handling structure, server-side auth token
+handling (JWT issuance/refresh/revocation), transaction boundary placement in
+application code, and in-process shared state/pool sizing. SQL, index, and
+DB-side transaction/locking mechanics stay in the databases domain (pages link
+there).
 
 Match your situation to a "load when" line; load only matching pages.
 
@@ -39,9 +42,20 @@ Match your situation to a "load when" line; load only matching pages.
 |------|-----------|
 | [exception-handling](errors/exception-handling.md) | Writing a catch block or deciding where errors are handled/logged/translated in a service — catch placement, log-once, wrapping with cause preserved, typed results for expected outcomes; one fault producing duplicate alerts |
 
-## Planned (unseeded categories)
+## auth
 
-| Category | Until seeded |
-|----------|--------------|
-| orm-usage | N+1 and batching → `databases/query-optimization/n-plus-one-queries` |
-| concurrency | DB-side concurrency/locking → `databases/transactions/isolation-level-selection` |
+| Page | Load when |
+|------|-----------|
+| [jwt-server-side](auth/jwt-server-side.md) | Implementing or reviewing JWT issuance/verification on the server — choosing the signing algorithm (HS256 vs RS256/ES256/EdDSA), the per-request verification checklist (alg allowlist, exp/nbf, iss/aud, typ), access/refresh token lifetimes, refresh-token storage and rotation with reuse detection, revocation on logout/password change, deciding what goes in claims (the session-vs-token choice lives in wiki/security/authn/; client-side token storage in wiki/frontend/) |
+
+## orm
+
+| Page | Load when |
+|------|-----------|
+| [transaction-boundaries](orm/transaction-boundaries.md) | Deciding where a DB transaction starts/ends in application code — service vs controller vs per-repository-call boundaries, what belongs inside (external calls and slow computation out), @Transactional-style annotation/proxy pitfalls (self-invocation, method visibility, rollback-only propagation), read-only flags, chunking batch writes; debugging partial writes or connection-pool exhaustion around open transactions |
+
+## concurrency
+
+| Page | Load when |
+|------|-----------|
+| [shared-state-and-pools](concurrency/shared-state-and-pools.md) | Request handlers share in-process mutable state (caches, counters, maps) — choosing concurrency-safe structures/confinement vs pushing correctness-bearing state to the shared store in multi-instance deployments; sizing thread pools and connection pools; deadlocks from holding one pooled resource while acquiring another; bounding in-memory queues; debugging deadlock or starvation under load |

@@ -13,3 +13,6 @@ Append-only. Format: `## [YYYY-MM-DD] <ingest|revise|lint|gap|contradiction|drif
 ## [2026-07-10] revise | primary-key-choice: exposure-undecided rule promoted into the main decision table (default UUIDv7, forbid unstated internal classification); v7 generation note added
 ## [2026-07-10] ingest | Seed 6 domains in parallel (39 pages): debugging (7), testing (6), frontend (8), backend (7), infrastructure (6), qa (5, new domain split from testing). All cited URLs live-verified; practice-based claims tagged field-tested
 ## [2026-07-10] revise | INDEX.md: 6 domains flipped to seeded, qa registered, testing/qa boundary stated both ways, security scaffold line gained cross-pointers
+## [2026-07-10] ingest | Seed final 3 domains + deepen 2 (21 pages): security (6), platforms (5), mobile (5), backend auth/orm/concurrency (3, Planned section retired), frontend auth + infinite-scroll (2). JWT split: choice=security, server=backend, client=frontend. All cited URLs live-verified
+## [2026-07-10] revise | INDEX.md: security/platforms/mobile flipped to seeded (all 10 domains seeded); backend/frontend route lines extended
+## [2026-07-10] lint | Haiku validation wave 3: 6/6 scenarios (security authn choice, JWT server, token client, infinite scroll, platforms, mobile) solved via routing alone, 0 STUCK — incl. 3-domain hop security→backend→frontend on the authn scenario

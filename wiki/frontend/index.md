@@ -1,8 +1,8 @@
 # frontend — Domain Index
 
 Route here for: web UI code — component state placement, rendering performance,
-in-UI data fetching, form validation UX, XSS-safe output, interactive-element
-accessibility.
+in-UI data fetching, form validation UX, XSS-safe output, client-side auth
+token handling, interactive-element accessibility.
 
 Match your situation to a "load when" line; load only matching pages.
 
@@ -25,6 +25,7 @@ Match your situation to a "load when" line; load only matching pages.
 | Page | Load when |
 |------|-----------|
 | [race-conditions](data-fetching/race-conditions.md) | Repeated fetches with changing params can overlap (search-as-you-type, rapid tab/filter switches); UI intermittently shows results for a previous input; mutations race refetches |
+| [infinite-scroll](data-fetching/infinite-scroll.md) | Implementing infinite scroll or a load-more feed; an existing feed loses scroll position on back-navigation, duplicates/skips items, or spams page requests; choosing between infinite scroll and a load-more button |
 
 ## forms
 
@@ -37,6 +38,12 @@ Match your situation to a "load when" line; load only matching pages.
 | Page | Load when |
 |------|-----------|
 | [xss-safe-rendering](security/xss-safe-rendering.md) | Rendering any value your team did not author (user input, CMS/rich text, URL params, third-party API fields); touching raw-HTML sinks, user URLs in href/src, or runtime-built DOM |
+
+## auth
+
+| Page | Load when |
+|------|-----------|
+| [token-handling-client-side](auth/token-handling-client-side.md) | A browser app must store or send auth credentials (JWT access/refresh tokens or session ids); reviewing where tokens live client-side; implementing silent refresh or logout; deciding whether the auth transport needs CSRF defense |
 
 ## accessibility
 
