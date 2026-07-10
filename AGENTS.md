@@ -129,6 +129,16 @@ Run these via the skill files, which contain the full step-by-step workflows:
 - **Lint** (`skills/lint/SKILL.md`) — health check: unsourced claims, "don't"s without
   "instead"s, banned vague qualifiers, orphan pages, broken links, stale `last_verified`.
 
+Two further skills use the wiki to run development work (rather than maintain the wiki):
+
+- **Plan** (`skills/plan/SKILL.md`) — for a capable model: make every design decision
+  (wiki-grounded), then decompose the work into ordered task files sized for a small
+  model (≤3 files, ≤4 wiki pages, verifiable, self-contained), each mapping the exact
+  wiki pages that govern it.
+- **Implement** (`skills/implement/SKILL.md`) — for the small model executing one task:
+  read only the task file + its named wiki pages + named inputs, no improvisation
+  (missing decisions are reported BLOCKED, never guessed), verify, report in a fixed format.
+
 ## Naming
 
 - Domains and categories: lowercase kebab-case nouns (`query-optimization`).

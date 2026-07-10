@@ -42,6 +42,8 @@ Three operations (agent workflows in `skills/`):
 | `skills/ingest` | Add knowledge — a lesson learned, an edge case, a sourced practice. Merges into existing pages, enforces sourcing and positive framing |
 | `skills/query` | Answer a question from the wiki with citations; recurring syntheses get filed back as pages |
 | `skills/lint` | Health check — unsourced claims, bare prohibitions, broken links, stale pages |
+| `skills/plan` | For a capable model: make every design decision (wiki-grounded) and decompose work into ordered task files sized so a small model can execute each one with only the task + its mapped wiki pages |
+| `skills/implement` | For the small model executing one planned task: load only what the task names, never improvise (missing decisions → BLOCKED report, not a guess), verify, report |
 
 ## Status
 
