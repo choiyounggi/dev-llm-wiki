@@ -1,17 +1,39 @@
 # testing — Domain Index
 
-Route here for: writing or reviewing tests, choosing test level (unit/integration/e2e),
-test data, coverage strategy, QA process.
+Route here for: writing or structuring automated tests — choosing the test
+level, selecting cases and assertions, test data and isolation, mock/fake
+decisions, fixing flaky tests. Release-process quality (gates, manual testing,
+bug triage) → wiki/qa/.
 
-No pages yet. Grow this domain via `skills/ingest/SKILL.md`.
+Match your situation to a "load when" line; load only matching pages.
 
-Planned categories (create on first ingest that fits):
+## strategy
 
-| Category | Will cover |
-|----------|-----------|
-| test-level-choice | What to test at unit vs integration vs e2e; cost per level |
-| test-quality | Assertions that catch regressions, boundary cases, error paths |
-| test-data | Fixtures vs factories, minimal data per test, isolation between tests |
-| mocking | What to mock (I/O boundaries) and what to keep real |
-| flaky-tests | Diagnosing nondeterminism: time, order, shared state, async waits |
-| qa-process | Regression checklists, release gates, bug triage |
+| Page | Load when |
+|------|-----------|
+| [test-level-choice](strategy/test-level-choice.md) | Deciding at which level (unit/integration/e2e) to test new or changed behavior; reviewing a test plan's level distribution; logic buried in a controller or framework wiring needs coverage |
+
+## quality
+
+| Page | Load when |
+|------|-----------|
+| [minimum-case-set](quality/minimum-case-set.md) | Writing tests for a function/endpoint/change and choosing which cases to cover; reviewing whether coverage suffices; picking boundary values by input type; adding a regression test for a bug fix |
+| [behavior-not-implementation](quality/behavior-not-implementation.md) | Deciding what a test should assert; a behavior-preserving refactor broke tests; tempted to expose privates for testing; deciding whether a snapshot test is appropriate |
+
+## data
+
+| Page | Load when |
+|------|-----------|
+| [test-data-and-isolation](data/test-data-and-isolation.md) | Tests need fixture data and you are choosing how to create it; tests pass alone but fail together (or vice versa); DB cleanup, shared fixtures, time-dependent logic, or unique-value collisions |
+
+## mocking
+
+| Page | Load when |
+|------|-----------|
+| [what-to-mock](mocking/what-to-mock.md) | Deciding whether to mock/stub/fake a dependency or use the real one; mocks breaking on refactors; testing handling of a third-party's failure modes; the same mock setup is copy-pasted across tests |
+
+## flaky
+
+| Page | Load when |
+|------|-----------|
+| [diagnosing-flaky-tests](flaky/diagnosing-flaky-tests.md) | A test fails intermittently with no code change: on retry, in CI only, or only when run with other tests; deciding policy for a newly identified flaky test (quarantine vs retry) |
