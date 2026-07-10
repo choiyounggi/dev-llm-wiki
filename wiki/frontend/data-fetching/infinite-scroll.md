@@ -11,7 +11,7 @@ sources:
   - https://developer.mozilla.org/en-US/docs/Web/API/History/scrollRestoration
   - https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Guides/Live_regions
 last_verified: 2026-07-10
-related: [frontend-data-fetching-race-conditions, frontend-rendering-long-lists, frontend-state-client-vs-server-state, backend-api-design-pagination-contract, databases-query-optimization-keyset-pagination]
+related: [frontend-data-fetching-race-conditions, frontend-rendering-long-lists, frontend-state-client-vs-server-state, backend-common-api-design-pagination-contract, databases-query-optimization-keyset-pagination]
 ---
 
 # Infinite Scroll and Load-More Feeds
@@ -42,7 +42,7 @@ load-more button.
 3. Request cursor pagination from the API and pass each response's cursor into
    the next request. Offset pages skip or duplicate items when rows are
    inserted or deleted between loads. Contract:
-   [backend-api-design-pagination-contract]; SQL side:
+   [backend-common-api-design-pagination-contract]; SQL side:
    [databases-query-optimization-keyset-pagination].
 4. Append pages into ONE ordered list in the server-state cache, keyed by the
    query params (TanStack Query `useInfiniteQuery` pattern;
@@ -76,7 +76,7 @@ load-more button.
 | If you are about to | Do this instead | Why |
 |---------------------|-----------------|-----|
 | Attach a scroll event handler with manual position math | IntersectionObserver on a sentinel with `rootMargin` | Scroll handlers run per event on the main thread — jank plus missed/duplicate fires |
-| Use offset/page-number pagination for a feed that changes | Cursor pagination ([backend-api-design-pagination-contract]) | Inserts/deletes between loads shift offsets — items skip or duplicate |
+| Use offset/page-number pagination for a feed that changes | Cursor pagination ([backend-common-api-design-pagination-contract]) | Inserts/deletes between loads shift offsets — items skip or duplicate |
 | Let every observer callback start a request | One page request at a time behind an in-flight flag | The callback fires repeatedly while the sentinel is visible — request stampede |
 | Stop silently when a page load fails | Inline retry row at the load point | The feed reads as complete; the user has no recovery path |
 

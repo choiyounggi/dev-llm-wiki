@@ -142,6 +142,10 @@ Two further skills use the wiki to run development work (rather than maintain th
 ## Naming
 
 - Domains and categories: lowercase kebab-case nouns (`query-optimization`).
+- A domain may nest one subtree level when it splits by stack/environment
+  (`backend/common/`, `backend/java/`, `backend/node/`, `backend/python/`); page ids
+  then include the subtree: `backend-java-jpa-<slug>`. The domain `index.md` routes
+  concern-first (shared subtree) then stack; each stack subtree has its own `index.md`.
 - Page files: the situation, not the technology (`composite-index-column-order.md`,
   not `postgres-tips.md`).
 - Page ids: `<domain>-<category>-<slug>` matching the file path.

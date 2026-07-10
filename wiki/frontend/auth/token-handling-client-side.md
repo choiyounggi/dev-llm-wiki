@@ -44,7 +44,7 @@ implementing silent refresh or logout. The choice of auth approach itself
    already-rotated refresh token revokes the whole session.
 3. Logout: clear the in-memory token and cached user data, then call the
    server endpoint that revokes the refresh token/session. Issuance, rotation,
-   and revocation logic are server-side — see wiki/backend/auth/ (text pointer).
+   and revocation logic are server-side — see wiki/backend/common/auth/ (text pointer).
 4. CSRF defense follows from the transport:
 
 | Auth transport | CSRF defense |

@@ -10,7 +10,7 @@ sources:
   - https://developer.apple.com/documentation/backgroundtasks/bgtaskscheduler
   - https://developer.apple.com/documentation/foundation/urlsessionconfiguration/waitsforconnectivity
 last_verified: 2026-07-10
-related: [backend-reliability-timeouts-and-retries, mobile-offline-offline-first-sync]
+related: [backend-common-reliability-timeouts-and-retries, mobile-offline-offline-first-sync]
 ---
 
 # API Calls over Mobile Networks
@@ -27,7 +27,7 @@ battery drain, or timeouts that do not reproduce on office wifi.
    retry affordance. An infinite spinner is a missing state, not a loading state.
 2. **Retry policy: inherit the server-side rules, add the mobile lever.** Base policy
    (retry idempotent operations only, capped exponential backoff with jitter, respect
-   the deadline) is [backend-reliability-timeouts-and-retries]. On mobile, add:
+   the deadline) is [backend-common-reliability-timeouts-and-retries]. On mobile, add:
    while the device is offline, retry on the connectivity-restored signal instead of
    blind timers — Android `NetworkCallback` / WorkManager `NetworkType.CONNECTED`
    constraint; iOS `URLSessionConfiguration.waitsForConnectivity` / `NWPathMonitor`.
@@ -56,7 +56,7 @@ battery drain, or timeouts that do not reproduce on office wifi.
 | Request in flight when the app is backgrounded | Expect suspension/process death mid-request: make the operation resumable — route user writes through the outbox in [mobile-offline-offline-first-sync] |
 | Large upload/download | Use OS background transfer (iOS `URLSession` background session; Android WorkManager) so the transfer survives app suspension and process death |
 | Wifi connected but no internet (captive portal) | Reachability says "connected" — treat the request timeout as the real signal and show the failure state; connectivity signals gate retries, they do not guarantee success |
-| Server responds slowly but successfully after client timeout | The action may have been applied server-side — retry only with an idempotency key (policy in [backend-reliability-timeouts-and-retries]) |
+| Server responds slowly but successfully after client timeout | The action may have been applied server-side — retry only with an idempotency key (policy in [backend-common-reliability-timeouts-and-retries]) |
 
 ## Instead of
 
