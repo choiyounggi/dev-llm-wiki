@@ -55,6 +55,8 @@ or load spikes when hot keys expire (thundering herd).
 | In-process cache on multiple instances | A write-path delete clears only the local instance. Use a shared cache, or broadcast invalidation (pub/sub) to all instances; the TTL covers instances that miss the broadcast |
 | Caching authorization/permission results | Key by (principal, resource) and use a short TTL — revocation must propagate within the TTL, so the TTL equals your maximum acceptable revocation delay |
 | Shared cache is down (Redis outage) | Fall through to the source **with a concurrency cap** and treat the cap as fail-fast — an uncapped fallthrough herd turns a cache outage into a source outage → [backend-reliability-timeouts-and-retries] |
+| Cache shares a store (Redis instance) with sessions or other loss-intolerant data | Separate them: different instances, or at minimum different eviction domains — rebuildable cache data on `allkeys-lru`-style eviction, sessions/critical keys on a store configured `noeviction` with by-design TTLs. When memory fills, eviction picks victims by policy, not by importance — TTL-less cache keys silently evict sessions and users get logged out with zero error logs |
+| Inherited store has accumulated TTL-less keys | Audit (`SCAN` + check TTL = -1) and assign TTLs in throttled batches — a single mass-expire pass herds both the store and the source |
 
 ## Instead of
 

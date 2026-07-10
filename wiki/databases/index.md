@@ -41,4 +41,5 @@ Match your situation to a "load when" line; load only matching pages.
 
 | Page | Load when |
 |------|-----------|
-| [isolation-level-selection](transactions/isolation-level-selection.md) | Check-then-act writes, lost updates, duplicate bookings, choosing isolation/locking |
+| [isolation-level-selection](transactions/isolation-level-selection.md) | Check-then-act writes, lost updates, duplicate bookings, choosing isolation/locking; deadlock-detected errors; oversell despite @Transactional |
+| [optimistic-vs-pessimistic-locking](transactions/optimistic-vs-pessimistic-locking.md) | Multi-step read-modify-write that cannot fold into one UPDATE — choosing version-column optimistic vs FOR UPDATE by conflict frequency; stale form submits; retry storms on hot rows |

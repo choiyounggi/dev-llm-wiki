@@ -35,12 +35,14 @@ Match your situation to a "load when" line; load only matching pages.
 | Page | Load when |
 |------|-----------|
 | [idempotent-handlers](jobs/idempotent-handlers.md) | Writing a queue consumer, background job, or scheduled task — surviving at-least-once redelivery, dedupe by message id, transactional outbox for enqueue-with-DB-write, poison messages/DLQ, checkpointing long jobs; debugging duplicate side effects from jobs |
+| [scheduled-job-overlap](jobs/scheduled-job-overlap.md) | A scheduled job may still be running when its next start fires (cron, K8s CronJob concurrencyPolicy, multi-host schedulers); doubled batch effects at schedule boundaries; pairing skip-on-overlap with hang timeouts |
 
 ## errors
 
 | Page | Load when |
 |------|-----------|
 | [exception-handling](errors/exception-handling.md) | Writing a catch block or deciding where errors are handled/logged/translated in a service — catch placement, log-once, wrapping with cause preserved, typed results for expected outcomes; one fault producing duplicate alerts |
+| [async-failure-handling](errors/async-failure-handling.md) | Handing work to in-process async (@Async, unawaited futures/promises) — deciding fire-and-forget vs consumed future vs durable job; side effects silently never happening with no error logs; unobserved futures; async work enqueued inside a transaction |
 
 ## auth
 
@@ -59,3 +61,4 @@ Match your situation to a "load when" line; load only matching pages.
 | Page | Load when |
 |------|-----------|
 | [shared-state-and-pools](concurrency/shared-state-and-pools.md) | Request handlers share in-process mutable state (caches, counters, maps) — choosing concurrency-safe structures/confinement vs pushing correctness-bearing state to the shared store in multi-instance deployments; sizing thread pools and connection pools; deadlocks from holding one pooled resource while acquiring another; bounding in-memory queues; debugging deadlock or starvation under load |
+| [distributed-locks](concurrency/distributed-locks.md) | Only one instance may perform an action at a time (batch, external side effect, rebuild) — Redis-style lock with owner token and TTL/watchdog, safe release, when a DB constraint/advisory lock suffices instead; debugging locks released by the wrong holder or work done twice despite a lock |

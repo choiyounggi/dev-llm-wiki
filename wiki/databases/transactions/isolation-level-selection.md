@@ -8,7 +8,7 @@ sources:
   - https://www.postgresql.org/docs/current/transaction-iso.html
   - https://dev.mysql.com/doc/refman/8.0/en/innodb-transaction-isolation-levels.html
 last_verified: 2026-07-10
-related: [databases-query-optimization-existence-and-count-checks, databases-schema-design-requirements-to-tables]
+related: [databases-query-optimization-existence-and-count-checks, databases-schema-design-requirements-to-tables, databases-transactions-optimistic-vs-pessimistic-locking]
 ---
 
 # Choosing Transaction Behavior for Concurrent Writes
@@ -49,9 +49,17 @@ updates / duplicate bookings under concurrency.
 |------|------|
 | `FOR UPDATE` on rows joined from multiple tables | Lock only the table you'll update: `FOR UPDATE OF t` — otherwise you serialize on rows you never write |
 | Two transactions lock the same rows in different orders | Deadlock. Impose one global lock ordering (e.g. by table then ascending id) and batch-lock with one ordered `SELECT ... FOR UPDATE` |
+| You receive `deadlock detected` (PostgreSQL 40P01 / MySQL 1213) | Working as designed: the DB found the cycle and rolled back one transaction. Retry the rolled-back transaction (same loop as serialization failures); reduce recurrence with the lock-ordering row above |
+| Read-modify-write cannot fold into one statement AND spans user think time or multi-step validation | Choose the locking style by conflict frequency → [databases-transactions-optimistic-vs-pessimistic-locking] |
 | MySQL Repeatable Read + `UPDATE` based on stale snapshot reads | Updates see current rows (semi-consistent behavior differs from the read snapshot); apply the conditional-`UPDATE` row above — precondition in the `WHERE`, 0 affected rows = rejected |
 | Undecided whether stock is a counter column or reservation rows summed against capacity | The data model decides the locking row: counter column → conditional `UPDATE`; reservation rows → the multi-row invariant row. Model per [databases-schema-design-requirements-to-tables] before choosing machinery |
 | Queue-style "grab next unprocessed row" | `SELECT ... FOR UPDATE SKIP LOCKED LIMIT 1` — workers skip contended rows instead of queueing on them |
+
+## Instead of
+
+| If you are about to | Do this instead | Why |
+|---------------------|-----------------|-----|
+| Rely on `@Transactional` / a transaction alone to prevent concurrent oversell | Fold the precondition into a conditional atomic UPDATE, or take a row lock per the table above | Transaction boundaries control visibility and atomicity of YOUR writes; at default isolation two transactions can both read stock=1, both pass the check, and both commit — no error, stock oversold |
 
 ## Sources
 
