@@ -35,12 +35,32 @@ skills/ingest|query|lint/    # the three operations
 When working on a task and you need guidance from this wiki:
 
 1. Read `INDEX.md`. Match your task to a domain by its "route here when" line.
-2. Read that domain's `wiki/<domain>/index.md`. Match your specific situation to
-   pages by their "load when" lines.
-3. Load **only the pages whose "When this applies" matches your situation**. If a
-   page's trigger does not match, do not keep it in context.
-4. Apply the page's directives. If your situation hits a listed edge case, follow the
-   edge-case row, not the general rule.
+   - **Several domains match**: route to the domain that owns the artifact you will
+     change (SQL/schema → databases; application code → backend; a failing system →
+     debugging). Reading a second domain's index to check is cheap and sanctioned;
+     bulk-loading pages from both is not.
+   - **Best match is marked `scaffold`**: it has no pages. Use the cross-pointers in
+     its index if any, take the next matching seeded domain, and append a `gap`
+     entry to `log.md`.
+2. Read that domain's `wiki/<domain>/index.md`. Select pages by their **"load when"
+   lines — these are the routing gate**. Load only pages whose line matches your
+   situation.
+3. After loading, the page's "When this applies" should confirm the match. If it
+   contradicts your situation, drop the page and append a `drift` entry to `log.md`
+   (index line and page trigger disagree — a lint defect), unless the page content
+   demonstrably serves your case anyway, in which case keep it and still log the drift.
+4. **Sanctioned extra hops**: when a loaded page routes you onward via an inline
+   `[page-id]` reference or a `related:` id, follow it — the citing directive is the
+   trigger. This is how constraint/index pages compose.
+5. If no page matches anywhere, answer from general knowledge **explicitly labeled
+   not wiki-backed**, and append a `gap` entry to `log.md`.
+6. Apply the page's directives:
+   - If your situation hits a listed edge case, follow the edge-case row, not the
+     general rule.
+   - Within a Do/decision table, when several rows match, apply the **most specific
+     row** (rows are ordered general → specific); when a general row and a
+     precondition-bearing row both fit, take the one that preserves the stated
+     invariant.
 
 Hard rule: never load a whole domain "for background". The index lines exist so you
 can decide relevance without opening pages.
@@ -121,6 +141,10 @@ Run these via the skill files, which contain the full step-by-step workflows:
 After any wiki change, all of these must hold (lint checks them):
 
 1. Every page is listed in its domain `index.md` with an accurate "load when" line.
+   The line must enumerate the page's **distinct use cases** (including
+   constraint/uniqueness/design-time uses), not only its headline framing, and must
+   not contradict the page's "When this applies". Decision tables inside pages are
+   ordered general → specific.
 2. Every domain appears in `INDEX.md`.
 3. `log.md` has an appended entry: `## [YYYY-MM-DD] <ingest|revise|lint> | <summary>`.
 4. Every `related:` id and inline link resolves to an existing page.

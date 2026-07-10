@@ -16,8 +16,9 @@ related: [databases-indexing-index-selection, databases-schema-design-soft-delet
 ## When this applies
 
 A query always filters on a fixed rare condition (`status = 'pending'`,
-`deleted_at IS NULL`), or filters on a function of a column (`lower(email)`), and a
-plain full-column index is either bloated or never used.
+`deleted_at IS NULL`); or filters on a function of a column (`lower(email)`); or a
+uniqueness rule applies only to a subset of rows (e.g. among live rows). Applies
+whether you are designing a new index or replacing a bloated/unused full-column one.
 
 ## Do this
 
@@ -26,6 +27,7 @@ plain full-column index is either bloated or never used.
 | Queries target a rare fixed value in a skewed column | Partial index: `CREATE INDEX ... ON t (created_at) WHERE status = 'pending'` — small, hot, and the planner uses it exactly for matching queries |
 | Live rows are the minority or queries always exclude soft-deleted rows | Partial index `WHERE deleted_at IS NULL` on the columns those queries use |
 | Uniqueness must hold only among live rows | Partial **unique** index: `CREATE UNIQUE INDEX ... ON t (email) WHERE deleted_at IS NULL` |
+| Uniqueness among live rows AND case-insensitive (emails, usernames) | Combine expression + partial: `CREATE UNIQUE INDEX ... ON t (lower(email)) WHERE deleted_at IS NULL` — and query with `lower(email) = lower(?)` |
 | Predicate applies a function/expression (`lower(email) = ?`, `(payload->>'type') = ?`) | Expression index on exactly that expression: `CREATE INDEX ... ON t (lower(email))` |
 
 Then verify the plan uses the index. For partial indexes the query's `WHERE` must

@@ -12,5 +12,5 @@ Planned categories (create on first ingest that fits):
 | reproduction | Minimal repro construction, environment parity, data-dependent bugs |
 | root-cause-isolation | Bisection, hypothesis testing, changing one variable at a time |
 | reading-signals | Stack traces, logs, core dumps, distributed traces |
-| performance-investigation | Profiling before optimizing, cold vs warm measurements, load-dependent bugs |
+| performance-investigation | Profiling before optimizing, cold vs warm measurements, load-dependent bugs (until seeded: slow queries → `databases/query-optimization/reading-execution-plans`) |
 | heisenbugs | Race conditions, timing sensitivity, observer effects |

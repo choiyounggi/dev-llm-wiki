@@ -7,7 +7,7 @@ confidence: field-tested
 sources:
   - https://www.postgresql.org/docs/current/indexes-partial.html
 last_verified: 2026-07-10
-related: [databases-indexing-partial-and-expression-indexes, databases-schema-design-nullability-and-defaults]
+related: [databases-indexing-partial-and-expression-indexes, databases-schema-design-nullability-and-defaults, databases-schema-design-foreign-keys-and-referential-actions]
 ---
 
 # Soft Delete
@@ -39,6 +39,9 @@ duplicate/ghost rows in a schema that already soft-deletes.
 | Case | Then |
 |------|------|
 | Some tables never need restore (logs, sessions, join rows) | Hard-delete those; soft-delete only where the requirement exists. Mixing is fine when each table's rule is explicit |
+| "Audit" means who-changed-what history, not just keeping deleted rows | A history/audit table (append-only) per [databases-schema-design-requirements-to-tables] — `deleted_at` preserves only the final state, not the changes |
+| Table also has a `status` column | Keep deletion out of the status value set — `deleted_at` is the single source of deletion truth; a 'deleted' status value creates two flags that will disagree |
+| Unique column must also be case-insensitive (emails) | Combine expression + partial: `UNIQUE INDEX ON t (lower(email)) WHERE deleted_at IS NULL` ([databases-indexing-partial-and-expression-indexes]) |
 | Aggregates/counts silently include deleted rows | Every aggregate must go through the live scope too — test list and count endpoints against a fixture containing deleted rows |
 | MySQL (no partial indexes) | Emulate live-row uniqueness with a generated column (e.g. `alive = IF(deleted_at IS NULL, 1, NULL)`) in a composite unique key — unique keys ignore NULL rows |
 | Restore collides with a live row created meanwhile | Restoration is an upsert-style operation: handle the unique conflict explicitly (merge, rename, or reject) |

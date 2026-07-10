@@ -7,7 +7,7 @@ confidence: field-tested
 sources:
   - https://www.postgresql.org/docs/current/ddl-constraints.html
 last_verified: 2026-07-10
-related: [databases-schema-design-primary-key-choice, databases-schema-design-nullability-and-defaults]
+related: [databases-schema-design-primary-key-choice, databases-schema-design-nullability-and-defaults, databases-schema-design-naming-conventions, databases-schema-design-foreign-keys-and-referential-actions, databases-schema-design-column-data-types]
 ---
 
 # Deriving Tables and Columns from Requirements
@@ -31,7 +31,7 @@ produce the tables, columns, and relationships for them.
 | "an X has one Y" and Y has its own lifecycle/queries | Y table with FK from X (or on Y, per ownership direction) |
 | "an X has many Y" | Y table with `x_id` FK, indexed |
 | "X and Y relate many-to-many" | Junction table; attributes of the relationship (since-date, role) live on the junction |
-| "Y happened at time T" (events, status changes, payments) | Append-style table with timestamp; treat rows as immutable facts |
+| "Y happened at time T" (events, status changes, payments) | Append-style table with timestamp; rows are immutable facts — enforce it (`REVOKE UPDATE, DELETE` from the app role, or a `BEFORE UPDATE` trigger that raises), don't rely on convention |
 3. **Normalize to 3NF by default**: every non-key column states a fact about the whole
    key. When the same fact would be stored in two places, move it to the table whose
    key it depends on. Denormalize only later, per measured read pattern, with a

@@ -38,6 +38,7 @@ Order columns by how the query uses them, left to right:
 | `WHERE a = ? AND b > ?` | `(a, b)` — equality first, range last |
 | `WHERE a = ? ORDER BY b LIMIT n` | `(a, b)` — index returns rows pre-sorted, no sort node |
 | `WHERE a > ? AND b = ?` | `(b, a)` — the equality column goes first even though it appears second in SQL |
+| `WHERE a = ? AND b = 'literal' ORDER BY c DESC LIMIT n` (the commonest OLTP list shape) | `(a, b, c)` — walked backwards for the DESC; when `'literal'` is a measured-rare fixed value, `(a, c) WHERE b = 'literal'` is the smaller alternative ([databases-indexing-partial-and-expression-indexes]) |
 
 ## Edge cases
 

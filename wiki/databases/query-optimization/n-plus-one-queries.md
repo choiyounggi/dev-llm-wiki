@@ -40,6 +40,7 @@ or a list endpoint whose query count scales with result size.
 
 | Case | Then |
 |------|------|
+| Endpoint needs both a to-one and an aggregate per row (author + comment count) | The strategies compose: join-fetch the to-one in the list query, plus one grouped aggregate query — two statements total, still O(1) |
 | Join-fetching two to-many collections at once (JPA `MultipleBagFetchException`, row explosion elsewhere) | Fetch one collection per query: split into sequential batched queries on the same parent set |
 | Batched `IN` list grows with page size × association fan-out | Apply the large-IN rules ([databases-query-optimization-large-in-lists]) |
 | Pagination plus to-many join fetch | The database paginates joined rows, not parents (JPA may paginate in memory). Paginate parent ids first, then batch-load associations for that page |

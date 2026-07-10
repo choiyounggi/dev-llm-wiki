@@ -44,6 +44,7 @@ Implementation rules for keyset:
 | Sort key is a timestamp with duplicates | The `id` tiebreaker is mandatory, not optional — timestamp-only cursors lose rows created in the same instant |
 | MySQL row-value comparison `(a,b) > (?,?)` | Optimizes poorly on some versions; rewrite as `a > ? OR (a = ? AND b > ?)` and verify the plan uses the index range |
 | Total count display ("Page 1 of 3,514") | Serve counts from an estimate or cached aggregate; an exact `COUNT(*)` per page view costs a full scan of the filtered set |
+| Client requests a page beyond the OFFSET cap | Pick one behavior and state it in the API contract: reject with a validation error steering to cursor parameters, or clamp to the cap and mark the response truncated |
 
 ## Sources
 

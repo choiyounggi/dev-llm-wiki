@@ -8,7 +8,7 @@ sources:
   - https://www.rfc-editor.org/rfc/rfc9562
   - https://dev.mysql.com/doc/refman/8.0/en/innodb-index-types.html
 last_verified: 2026-07-10
-related: [databases-schema-design-requirements-to-tables, databases-indexing-index-write-cost]
+related: [databases-schema-design-requirements-to-tables, databases-indexing-index-write-cost, databases-schema-design-column-data-types]
 ---
 
 # Choosing a Primary Key
@@ -39,6 +39,7 @@ existing key choice is causing problems (bloat, hot inserts, leaking ids).
 
 | Case | Then |
 |------|------|
+| Exposure undecided at design time | Assume the ids will eventually be exposed and use UUIDv7 — moving from sequential to non-enumerable ids later is a breaking API migration; the reverse problem never arises |
 | Junction (many-to-many) table | Composite PK of the two FKs is standard; add the reverse-order index for queries entering from the other side |
 | Multi-tenant tables | Lead unique constraints and hot indexes with `tenant_id`; whether the PK itself is composite (`tenant_id, id`) follows your sharding/RLS plan, and it must be decided before data accumulates |
 | UUIDv7 timestamp prefix leaks creation time | When creation time is itself sensitive, use v4 and accept the insert-locality cost |
