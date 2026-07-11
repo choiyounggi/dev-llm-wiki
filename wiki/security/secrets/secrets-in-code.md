@@ -9,7 +9,7 @@ sources:
   - https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository
   - https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables
   - https://vite.dev/guide/env-and-mode
-last_verified: 2026-07-10
+last_verified: 2026-07-12
 related: [infrastructure-ci-cd-secrets-handling]
 ---
 
@@ -53,6 +53,7 @@ pasted, or logged; or you are setting up secret hygiene for a repository.
 | Secret found in a committed fixture, lockfile, or test | Same as committed to git: rotate and scrub; replace fixtures with obviously fake values (`sk_test_FAKE...`) |
 | Rotation needs coordination (shared prod credential, third party) | Treat the interval as a live incident: cut the credential's permissions/IP scope now, and schedule the rotation with an owner and a date |
 | Secret must reach a config file at runtime (library only reads files) | Render the file at deploy/start from the secret store into a non-repo path; the template in the repo holds placeholders |
+| A third-party API takes its key in a URL query param and your HTTP client logs requests | The client (httpx/requests/axios) logs the full URL — key included — at its INFO level, so enabling root/DEBUG logging leaks it into log files. Keep the client's logger above INFO (or redact the URL), and confine any redaction/proxy to your own log calls — app-level redaction never sees the client library's own log lines |
 
 ## Instead of
 

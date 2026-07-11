@@ -37,6 +37,12 @@ Match your situation to a "load when" line; load only matching pages.
 | [nullability-and-defaults](schema-design/nullability-and-defaults.md) | Declaring column nullability/defaults; queries dropping rows around NULLs |
 | [soft-delete](schema-design/soft-delete.md) | Deleted records themselves must be restorable or kept (deleted_at schemas); deciding what a parent's deletion does to children that must survive (for who-changed-what history → requirements-to-tables) |
 
+## sqlite
+
+| Page | Load when |
+|------|-----------|
+| [concurrent-access-for-a-read-api](sqlite/concurrent-access-for-a-read-api.md) | Using SQLite as the store for an HTTP API that serves reads while a background job writes; `database is locked` under load; readers stalling during an import; choosing WAL vs rollback journal, busy_timeout, single-writer, per-connection pragma cost; scaling SQLite-backed reads across worker processes |
+
 ## transactions
 
 | Page | Load when |
