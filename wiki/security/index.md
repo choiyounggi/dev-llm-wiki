@@ -13,6 +13,12 @@ Match your situation to a "load when" line; load only matching pages.
 |------|-----------|
 | [validation-at-trust-boundaries](input/validation-at-trust-boundaries.md) | Data crosses a trust boundary into your system — HTTP bodies/params/headers/cookies, file uploads, webhook payloads, inter-service messages; choosing injection defense per output sink (SQL, shell, HTML, filesystem path); deciding validate-reject vs sanitize |
 
+## api-exposure
+
+| Page | Load when |
+|------|-----------|
+| [exposing-an-origin-http-api](api-exposure/exposing-an-origin-http-api.md) | Putting an internal/origin HTTP API behind a public reverse proxy, CDN, or tunnel (Cloudflare Tunnel); deciding which security controls are code vs edge (TLS/HSTS, rate limiting, WAF); adding security response headers and making them apply to 5xx too; disabling docs/OpenAPI schema at the origin; sanitizing error responses; a dev-mode flag that can disable auth in production |
+
 ## authn
 
 | Page | Load when |
